@@ -1,5 +1,5 @@
 import {signUser, login} from "./login.js"
-import {snake} from "./snake"
+import {canvaSnake} from "./snake"
 import { signUser, login } from "./login.js"
 import { getTopPlayers} from "./snakeapi.js"
 document.addEventListener('DOMContentLoaded', async () => {
@@ -23,4 +23,4 @@ btnSignup.addEventListener(('click'), () => {
     signUser(username.value, password.value)
 })
 
-
+canvaSnake();
