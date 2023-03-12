@@ -7,13 +7,14 @@ export function canvaSnake() {
   div$$.setAttribute("id", "gameContent");
   div$$.appendChild(canvas$$);
   canvas$$.setAttribute("id", "gameTable");
-  canvas$$.setAttribute("width", "800");
-  canvas$$.setAttribute("height", "800");
+  canvas$$.setAttribute("width", "400");
+  canvas$$.setAttribute("height", "400");
 
   //canvas
   const ctx = canvas$$.getContext("2d");
+  let speed = 7;
   let tileCount = 20;
-  let tileSize = 18;
+  let tileSize = canvas$$.clientWidth/tileCount-2;
   let headX = 10;
   let headY = 10;
   let xvelocity = 0;
@@ -35,25 +36,38 @@ export function canvaSnake() {
   }
 
   function drawGame() {
-    score = 0;
-    let speed = 7;
+    changeSnakePosition();
+    // game over logic
+    let result=isGameOver();
+    if(result){// if result is true stop other following function from exucuting
+        return;
+    }
+
     clearScreen();
     drawSnake();
-    changeSnakePosition();
-    checkCollision();
     drawApple();
+
+    checkCollision()
     drawScore();
-    setTimeout(drawGame, 1000 / speed); //update screen 7 times a second
+    setTimeout(drawGame, 1000/speed);//update screen 7 times a second
   }
 
   function drawSnake() {
-    ctx.fillStyle = "white";
-    for (let i = 0; i < snakeParts.length; i++) {
-      //draw snake parts
-      let part = snakeParts[i];
-      ctx.fillRect(part.x * tileCount, part.y * tileCount, tileSize, tileSize);
+    ctx.fillStyle="green";
+    //loop through our snakeparts array
+    for(let i=0;i<snakeParts.length;i++){
+        //draw snake parts
+        let part=snakeParts[i]
+         ctx.fillRect(part.x *tileCount, part.y *tileCount, tileSize,tileSize)
     }
-    snakeParts.push(new snakePart(headX, headY));
+    //add parts to snake --through push
+    snakeParts.push(new snakePart(headX,headY));//put item at the end of list next to the head
+    if(snakeParts.length>tailLength){
+        snakeParts.shift();//remove furthest item from  snake part if we have more than our tail size
+
+    }
+    ctx.fillStyle="orange";
+    ctx.fillRect(headX* tileCount,headY* tileCount, tileSize,tileSize)
   }
 
   function clearScreen() {
@@ -82,7 +96,7 @@ export function canvaSnake() {
       xvelocity = -1;
     }
     //right
-    if (event.keyCode == 48) {
+    if (event.keyCode == 39) {
       if (xvelocity == -1) return; //prevent snake from moving in opposite direcction
       yvelocity = 0;
       xvelocity = 1;
@@ -103,20 +117,14 @@ export function canvaSnake() {
     if (appleX == headX && appleY == headY) {
       appleX = Math.floor(Math.random() * tileCount);
       appleY = Math.floor(Math.random() * tileCount);
-    }
-  }
-
-  function checkCollision() {
-    if (appleX == headX && appleY == headY) {
-      appleX = Math.floor(Math.random() * tileCount);
-      appleY = Math.floor(Math.random() * tileCount);
       tailLength++;
+      score++;
     }
   }
   function drawScore() {
     ctx.fillStyle = "white";
     ctx.font = "20px verdena";
-    ctx.fillText("Score: " + score, canvas$$.clientWidth - 90, 30);
+    ctx.fillText("Score: " +score, canvas$$.clientWidth - 90, 30);
   }
 
   function isGameOver() {
@@ -152,10 +160,10 @@ export function canvaSnake() {
     //display text Game Over
     if (gameOver) {
       ctx.fillStyle = "white";
-      ctx.font = "50px verdana";
+      ctx.font = "20px verdana";
       ctx.fillText(
-        "Game Over! ",
-        canvas$$.clientWidth / 6.5,
+        `Game Over! Your Score: ${score}`,
+        canvas$$.clientWidth / 4.9,
         canvas$$.clientHeight / 2
       ); //position our text in center
     }
