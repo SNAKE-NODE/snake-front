@@ -1,7 +1,7 @@
 import {signUser, login} from "./login.js"
-import {canvaSnake} from "./snake"
-import { signUser, login } from "./login.js"
+import {canvaSnake} from "./snake.js"
 import { getTopPlayers} from "./snakeapi.js"
+
 document.addEventListener('DOMContentLoaded', async () => {
     const topPlayers = await getTopPlayers()
     drawTopPlayers(topPlayers)
