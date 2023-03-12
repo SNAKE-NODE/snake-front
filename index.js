@@ -1,4 +1,5 @@
 import {signUser, login} from "./login.js"
+import {snake} from "./snake"
 
 const btnLogin = document.querySelector('#log-in')
 const btnSignup = document.querySelector('#Register')
@@ -16,3 +17,5 @@ btnSignup.addEventListener(('click'), () => {
     signUser(username.value, password.value)
     console.log(`Usuario: ${username.value}; Contraseña: ${password.value}`);
 })
+
+
